@@ -1,43 +1,71 @@
 import * as dotenv from "dotenv";
 
-import { HardhatUserConfig, task } from "hardhat/config";
+import {HardhatUserConfig} from "hardhat/config";
+import {EthGasReporterConfig} from "hardhat-gas-reporter/src/types";
 import "@nomiclabs/hardhat-etherscan";
 import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
+// import "./tasks/index.ts";
 
 dotenv.config();
 
-// This is a sample Hardhat task. To learn how to create your own go to
-// https://hardhat.org/guides/create-task.html
-task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
-  const accounts = await hre.ethers.getSigners();
+interface IConfig extends HardhatUserConfig {
+    gasReporter?: EthGasReporterConfig;
+}
 
-  for (const account of accounts) {
-    console.log(account.address);
-  }
+const url = process.env.CHAIN_URL as string;
+const privateKey = process.env.PRIVATE_KEY as string;
+const chainId = Number(process.env.CHAIN_ID as string) || 0;
+const reportGas = (process.env.REPORT_GAS as string) === "true";
+const apiKey = process.env.API_KEY as string;
+
+const requiredEnvs = [
+    {value: url, key: "CHAIN_URL"},
+    {value: privateKey, key: "PRIVATE_KEY"},
+    {value: chainId, key: "CHAIN_ID"},
+    {value: apiKey, key: "API_KEY"},
+];
+
+requiredEnvs.forEach((item) => {
+    if (!item.value) {
+        throw new Error(
+            `Please check that the ${item.key} value exist in the .env file`
+        );
+    }
 });
 
-// You need to export an object to set up your config
-// Go to https://hardhat.org/config/ to learn more
-
-const config: HardhatUserConfig = {
-  solidity: "0.8.4",
-  networks: {
-    ropsten: {
-      url: process.env.ROPSTEN_URL || "",
-      accounts:
-        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+const config: IConfig = {
+    solidity: {
+        version: "0.8.4",
+        settings: {
+            optimizer: {
+                enabled: true,
+                runs: 200,
+            },
+        },
     },
-  },
-  gasReporter: {
-    enabled: process.env.REPORT_GAS !== undefined,
-    currency: "USD",
-  },
-  etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY,
-  },
+    networks: {
+        kovan: {
+            url,
+            accounts: privateKey ? [privateKey] : [],
+            chainId: chainId,
+        },
+    },
+    gasReporter: {
+        enabled: reportGas,
+        currency: "USD",
+    },
+    paths: {
+        artifacts: "./artifacts",
+        cache: "./cache",
+        sources: "./contracts",
+        tests: "./test",
+    },
+    etherscan: {
+        apiKey: apiKey,
+    },
 };
 
 export default config;
