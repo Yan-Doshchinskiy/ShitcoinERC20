@@ -1,12 +1,12 @@
 import { expect } from "chai";
 
-export default () => {
-  it("Bob's initial tokens amount must be equal to zero", async function () {
+export default (): void => {
+  it("Bob's initial tokens amount must be equal to zero", async function (): Promise<void> {
     const balance = await this.instance.balanceOf(this.bob.address);
     expect(balance).to.equal(0);
   });
 
-  it("Bobs balance equal to 400 after transfer. Alice balance equal to 600 after transfer", async function () {
+  it("Bobs balance equal to 400 after transfer. Alice balance equal to 600 after transfer", async function (): Promise<void> {
     await this.instance.connect(this.owner).mint(this.bob.address, 1000);
     await this.instance
       .connect(this.bob)
@@ -17,7 +17,7 @@ export default () => {
     const aliceBalance = await this.instance.balanceOf(this.alice.address);
     expect(aliceBalance).to.equal(600);
   });
-  it("Bobs balance equal to 400 after transferFrom. Recipient balance equal to 600 after transferFrom", async function () {
+  it("Bobs balance equal to 400 after transferFrom. Recipient balance equal to 600 after transferFrom", async function (): Promise<void> {
     await this.instance.connect(this.owner).mint(this.bob.address, 1000);
     await this.instance
       .connect(this.bob)
@@ -32,7 +32,7 @@ export default () => {
     );
     expect(recipientBalance).to.equal(600);
   });
-  it("Can't use transfer if amount exceeds allowance", async function () {
+  it("Can't use transfer if amount exceeds allowance", async function (): Promise<void> {
     await this.instance.connect(this.owner).mint(this.bob.address, 1000);
     await this.instance
       .connect(this.bob)
@@ -41,7 +41,7 @@ export default () => {
       this.instance.connect(this.bob).transfer(this.alice.address, 600)
     ).to.be.revertedWith("Amount exceeds allowance");
   });
-  it("Can't use transferFrom if amount exceeds allowance", async function () {
+  it("Can't use transferFrom if amount exceeds allowance", async function (): Promise<void> {
     await this.instance.connect(this.owner).mint(this.bob.address, 1000);
     await this.instance
       .connect(this.bob)
@@ -52,7 +52,7 @@ export default () => {
         .transferFrom(this.bob.address, this.sharedWallet.address, 600)
     ).to.be.revertedWith("Amount exceeds allowance");
   });
-  it("Can't transfer from zero address", async function () {
+  it("Can't transfer from zero address", async function (): Promise<void> {
     await this.instance.connect(this.owner).mint(this.bob.address, 1000);
     await this.instance
       .connect(this.bob)
@@ -61,7 +61,7 @@ export default () => {
       this.instance.connect(this.zeroAddress).transfer(this.bob.address, 600)
     ).to.be.revertedWith("Transfer from the zero address");
   });
-  it("Can't transfer to zero address", async function () {
+  it("Can't transfer to zero address", async function (): Promise<void> {
     await this.instance.connect(this.owner).mint(this.bob.address, 1000);
     await this.instance
       .connect(this.bob)
@@ -70,21 +70,21 @@ export default () => {
       this.instance.connect(this.bob).transfer(this.zeroAddress, 600)
     ).to.be.revertedWith("Transfer to the zero address");
   });
-  it("Can't transferFrom from zero address", async function () {
+  it("Can't transferFrom from zero address", async function (): Promise<void> {
     await expect(
       this.instance
         .connect(this.bob)
         .transferFrom(this.zeroAddress, this.sharedWallet.address, 600)
     ).to.be.revertedWith("Transfer from the zero address");
   });
-  it("Can't transferFrom to zero address", async function () {
+  it("Can't transferFrom to zero address", async function (): Promise<void> {
     await expect(
       this.instance
         .connect(this.bob)
         .transferFrom(this.alice.address, this.zeroAddress, 600)
     ).to.be.revertedWith("Transfer to the zero address");
   });
-  it("Can't transfer if amount exceeds balance", async function () {
+  it("Can't transfer if amount exceeds balance", async function (): Promise<void> {
     await this.instance.connect(this.owner).mint(this.bob.address, 1000);
     await this.instance
       .connect(this.bob)
@@ -93,7 +93,7 @@ export default () => {
       this.instance.connect(this.bob).transfer(this.alice.address, 6000)
     ).to.be.revertedWith("Transfer amount exceeds balance");
   });
-  it("Can't transferFrom if amount exceeds balance", async function () {
+  it("Can't transferFrom if amount exceeds balance", async function (): Promise<void> {
     await this.instance.connect(this.owner).mint(this.bob.address, 1000);
     await this.instance
       .connect(this.bob)

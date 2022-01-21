@@ -19,20 +19,22 @@ const url = process.env.CHAIN_URL as string;
 const ownerPrivateKey = process.env.OWNER_PRIVATE_KEY as string;
 const secondSignerPrivateKey = process.env.SECOND_SIGNER_KEY as string;
 const accounts = [ownerPrivateKey, secondSignerPrivateKey].filter(
-  (account) => account
+  (account: string): boolean => !!account
 );
 const chainId = Number(process.env.CHAIN_ID as string) || 0;
 const reportGas = (process.env.REPORT_GAS as string) === "true";
 const apiKey = process.env.API_KEY as string;
 
-const requiredEnvs = [
+type IEnvItem = { value: string | number; key: string };
+
+const requiredEnvs: Array<IEnvItem> = [
   { value: url, key: "CHAIN_URL" },
   { value: ownerPrivateKey, key: "PRIVATE_KEY" },
   { value: chainId, key: "CHAIN_ID" },
   { value: apiKey, key: "API_KEY" },
 ];
 
-requiredEnvs.forEach((item) => {
+requiredEnvs.forEach((item: IEnvItem): void => {
   if (!item.value) {
     throw new Error(
       `Please check that the ${item.key} value exist in the .env file`
