@@ -2,18 +2,18 @@ import { expect } from "chai";
 
 export default () => {
   it("Contract initial totalSupply must be equal to zero", async function () {
-    const totalSupply = await this.instance.getTotalSupply();
+    const totalSupply = await this.instance.totalSupply();
     expect(totalSupply).to.equal(0);
   });
   it("Total supply after mint must be equal to 5000", async function () {
     await this.instance.connect(this.owner).mint(this.bob.address, 5000);
-    const totalSupply = await this.instance.getTotalSupply();
+    const totalSupply = await this.instance.totalSupply();
     expect(totalSupply).to.equal(5000);
   });
   it("Total supply after mint and burn must be equal to 2500", async function () {
     await this.instance.connect(this.owner).mint(this.bob.address, 5000);
     await this.instance.connect(this.owner).burn(this.bob.address, 2500);
-    const totalSupply = await this.instance.getTotalSupply();
+    const totalSupply = await this.instance.totalSupply();
     expect(totalSupply).to.equal(2500);
   });
   it("Bob's balance after mint must be equal to 1000", async function () {

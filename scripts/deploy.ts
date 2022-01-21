@@ -1,10 +1,15 @@
 import { ethers } from "hardhat";
 
+// npx hardhat run scripts/deploy.ts --network kovan
+
 async function main(): Promise<void> {
-  const Factory = await ethers.getContractFactory("ShitcoinToken");
-  const Contract = await Factory.deploy("Hello, Hardhat!");
+  const [deployer] = await ethers.getSigners();
+  console.log("Deploying contracts with the account:", deployer.address);
+  console.log("Account balance:", (await deployer.getBalance()).toString());
+  const Token = await ethers.getContractFactory("ShitcoinToken");
+  const Contract = await Token.deploy();
   await Contract.deployed();
-  console.log("Greeter deployed to:", Contract.address);
+  console.log("ShitcoinToken deployed to:", Contract.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

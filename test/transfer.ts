@@ -32,6 +32,15 @@ export default () => {
     );
     expect(recipientBalance).to.equal(600);
   });
+  it("Can't use transfer if amount exceeds allowance", async function () {
+    await this.instance.connect(this.owner).mint(this.bob.address, 1000);
+    await this.instance
+      .connect(this.bob)
+      .increaseAllowance(this.alice.address, 500);
+    await expect(
+      this.instance.connect(this.bob).transfer(this.alice.address, 600)
+    ).to.be.revertedWith("Amount exceeds allowance");
+  });
   it("Can't use transferFrom if amount exceeds allowance", async function () {
     await this.instance.connect(this.owner).mint(this.bob.address, 1000);
     await this.instance

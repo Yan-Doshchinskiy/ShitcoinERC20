@@ -7,7 +7,7 @@ import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
-// import "./tasks/index.ts";
+import "./tasks/index.ts";
 
 dotenv.config();
 
@@ -16,14 +16,18 @@ interface IConfig extends HardhatUserConfig {
 }
 
 const url = process.env.CHAIN_URL as string;
-const privateKey = process.env.PRIVATE_KEY as string;
+const ownerPrivateKey = process.env.OWNER_PRIVATE_KEY as string;
+const secondSignerPrivateKey = process.env.SECOND_SIGNER_KEY as string;
+const accounts = [ownerPrivateKey, secondSignerPrivateKey].filter(
+  (account) => account
+);
 const chainId = Number(process.env.CHAIN_ID as string) || 0;
 const reportGas = (process.env.REPORT_GAS as string) === "true";
 const apiKey = process.env.API_KEY as string;
 
 const requiredEnvs = [
   { value: url, key: "CHAIN_URL" },
-  { value: privateKey, key: "PRIVATE_KEY" },
+  { value: ownerPrivateKey, key: "PRIVATE_KEY" },
   { value: chainId, key: "CHAIN_ID" },
   { value: apiKey, key: "API_KEY" },
 ];
@@ -49,7 +53,7 @@ const config: IConfig = {
   networks: {
     kovan: {
       url,
-      accounts: privateKey ? [privateKey] : [],
+      accounts: accounts,
       chainId: chainId,
     },
   },
