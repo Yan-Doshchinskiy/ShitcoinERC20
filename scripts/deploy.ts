@@ -1,7 +1,5 @@
 import { ethers } from "hardhat";
 
-// npx hardhat run scripts/deploy.ts --network kovan
-
 async function main(): Promise<void> {
   const [deployer] = await ethers.getSigners();
   console.log("Deploying contracts with the account:", deployer.address);
