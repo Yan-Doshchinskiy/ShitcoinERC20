@@ -1,19 +1,24 @@
-import { expect } from "chai";
-import { ethers } from "hardhat";
+// eslint-disable-next-line node/no-missing-import
+import hre, { ethers, artifacts, waffle } from "hardhat";
+import { Artifact } from "hardhat/types";
+import viewFuncTests from "./viewFunctions";
+import allowanceTests from "./allowance";
+import totalSupplyTests from "./totalSupply";
+import transferTests from "./transfer";
 
-describe("Greeter", function () {
-  it("Should return the new greeting once it's changed", async function () {
-    const Greeter = await ethers.getContractFactory("Greeter");
-    const greeter = await Greeter.deploy("Hello, world!");
-    await greeter.deployed();
-
-    expect(await greeter.greet()).to.equal("Hello, world!");
-
-    const setGreetingTx = await greeter.setGreeting("Hola, mundo!");
-
-    // wait until the transaction is mined
-    await setGreetingTx.wait();
-
-    expect(await greeter.greet()).to.equal("Hola, mundo!");
+describe("Token contract testing", async function () {
+  before(async function () {
+    this.hre = hre;
+    this.zeroAddress = "0x0000000000000000000000000000000000000000";
+    [this.owner, this.alice, this.bob, this.sharedWallet] =
+      await ethers.getSigners();
   });
+  beforeEach(async function () {
+    const artifact: Artifact = await artifacts.readArtifact("ShitcoinToken");
+    this.instance = await waffle.deployContract(this.owner, artifact, []);
+  });
+  viewFuncTests();
+  allowanceTests();
+  totalSupplyTests();
+  transferTests();
 });
