@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 
-import {HardhatUserConfig} from "hardhat/config";
-import {EthGasReporterConfig} from "hardhat-gas-reporter/src/types";
+import { HardhatUserConfig } from "hardhat/config";
+import { EthGasReporterConfig } from "hardhat-gas-reporter/src/types";
 import "@nomiclabs/hardhat-etherscan";
 import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
@@ -12,7 +12,7 @@ import "solidity-coverage";
 dotenv.config();
 
 interface IConfig extends HardhatUserConfig {
-    gasReporter?: EthGasReporterConfig;
+  gasReporter?: EthGasReporterConfig;
 }
 
 const url = process.env.CHAIN_URL as string;
@@ -22,50 +22,50 @@ const reportGas = (process.env.REPORT_GAS as string) === "true";
 const apiKey = process.env.API_KEY as string;
 
 const requiredEnvs = [
-    {value: url, key: "CHAIN_URL"},
-    {value: privateKey, key: "PRIVATE_KEY"},
-    {value: chainId, key: "CHAIN_ID"},
-    {value: apiKey, key: "API_KEY"},
+  { value: url, key: "CHAIN_URL" },
+  { value: privateKey, key: "PRIVATE_KEY" },
+  { value: chainId, key: "CHAIN_ID" },
+  { value: apiKey, key: "API_KEY" },
 ];
 
 requiredEnvs.forEach((item) => {
-    if (!item.value) {
-        throw new Error(
-            `Please check that the ${item.key} value exist in the .env file`
-        );
-    }
+  if (!item.value) {
+    throw new Error(
+      `Please check that the ${item.key} value exist in the .env file`
+    );
+  }
 });
 
 const config: IConfig = {
-    solidity: {
-        version: "0.8.4",
-        settings: {
-            optimizer: {
-                enabled: true,
-                runs: 200,
-            },
-        },
+  solidity: {
+    version: "0.8.4",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200,
+      },
     },
-    networks: {
-        kovan: {
-            url,
-            accounts: privateKey ? [privateKey] : [],
-            chainId: chainId,
-        },
+  },
+  networks: {
+    kovan: {
+      url,
+      accounts: privateKey ? [privateKey] : [],
+      chainId: chainId,
     },
-    gasReporter: {
-        enabled: reportGas,
-        currency: "USD",
-    },
-    paths: {
-        artifacts: "./artifacts",
-        cache: "./cache",
-        sources: "./contracts",
-        tests: "./test",
-    },
-    etherscan: {
-        apiKey: apiKey,
-    },
+  },
+  gasReporter: {
+    enabled: reportGas,
+    currency: "USD",
+  },
+  paths: {
+    artifacts: "./artifacts",
+    cache: "./cache",
+    sources: "./contracts",
+    tests: "./test",
+  },
+  etherscan: {
+    apiKey: apiKey,
+  },
 };
 
 export default config;
