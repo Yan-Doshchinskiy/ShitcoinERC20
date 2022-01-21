@@ -5,7 +5,6 @@ task("mint", "Mint new tokens")
   .addParam("amount", "tokens amount")
   .setAction(async ({ to, amount }, hre) => {
     const [signer] = await hre.ethers.getSigners();
-    // @ts-ignore
     const instance = await hre.ethers.getContractAt(
       "ShitcoinToken",
       process.env.CONTRACT_ADDRESS as string,

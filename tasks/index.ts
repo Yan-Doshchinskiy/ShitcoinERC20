@@ -1,9 +1,9 @@
-import "./allowance";
-import "./balance";
-import "./approve";
-import "./mint";
-import "./transfer";
-import "./transferFrom";
+import "./allowance.ts";
+import "./balance.ts";
+import "./approve.ts";
+import "./mint.ts";
+import "./transfer.ts";
+import "./transferFrom.ts";
 
 // 1 0xA8FFA026A9FBEb2654fE3c9454Ff7594A6333b9B
 // 2 0x5A8Dc06711DC4E3b4F21A0Ab0abD54B363A3fcC7
