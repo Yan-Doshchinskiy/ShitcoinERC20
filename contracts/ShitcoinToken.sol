@@ -111,10 +111,9 @@ contract ShitcoinToken {
         emit Transfer(from, address(0), amount);
     }
 
-    //functions
+    // transfer functions
 
     function transfer(address to, uint256 amount) external returns (bool) {
-        uint256 _currentAllowance = allowance(msg.sender, to);
         _transfer(msg.sender, to, amount);
         return true;
     }
