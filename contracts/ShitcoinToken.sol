@@ -116,8 +116,6 @@ contract ShitcoinToken {
     function transfer(address to, uint256 amount) external returns (bool) {
         uint256 _currentAllowance = allowance(msg.sender, to);
         _transfer(msg.sender, to, amount);
-        require(_currentAllowance >= amount, "Amount exceeds allowance");
-        _approve(msg.sender, to, _currentAllowance - amount);
         return true;
     }
 
